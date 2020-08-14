@@ -1,80 +1,93 @@
-//import java.io.File;
-//import java.io.FileNotFoundException;
-//import java.util.Scanner;
-//import java.util.*;
+import java.io.*;
+import java.util.Scanner;
 import java.sql.*;
-
-//import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
 
 public class FirstExample {
-    // JDBC driver name and database URL
-    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-    static final String DB_URL = "jdbc:mysql://localhost/";
+
+   public static void main(String[] args) {
+      Statement stmt = null;
+      String sql;
+     
+
+      //Database creation/connection
+      Connection conn = Connector2.connect();
+      try{
+         sql = "CREATE TABLE Columns"
+         + "( A string, B string, C string, D string, E string, F string, G string, H string, I string, J string);";
+         stmt = conn.createStatement();
+         stmt.execute(sql);
+      }catch (SQLException e){
+         e.printStackTrace();
+      }
+
+
+      //Todo analyze JFrame to determine better solutions
+      JFrame frame = new JFrame();
+      JPanel topPanel = new JPanel();
+      JPanel centerPanel = new JPanel();
+      JLabel topLabel = new JLabel("Enter file name");
+      JTextField file = new JTextField(15);
+      JButton button = new JButton("Run");
  
-    //  Database credentials
-    static final String USER = "Steven";
-    static final String PASS = "mypoohbear#1";
-    
-    public static void main(String[] args) {
-    Connection conn = null;
-    Statement stmt = null;
-    try{
-       //STEP 2: Register JDBC driver
-       Class.forName("com.mysql.jdbc.Driver");
- 
-       //STEP 3: Open a connection
-       System.out.println("Connecting to database...");
-       conn = DriverManager.getConnection(DB_URL,USER,PASS);
- 
-       //STEP 4: Execute a query
-       System.out.println("Creating Database...");
-       stmt = conn.createStatement();
-       String sql;
-       //sql = "SELECT id, first, last, age FROM Employees";
-       //ResultSet rs = stmt.executeQuery(sql);
-       
-       sql = "CREATE DATABASE TEST";
-       stmt.executeUpdate(sql);
-       
- 
-       //STEP 5: Extract data from result set
-       /*while(rs.next()){
-          //Retrieve by column name
-          int id  = rs.getInt("id");
-          int age = rs.getInt("age");
-          String first = rs.getString("first");
-          String last = rs.getString("last");
- 
-          //Display values
-          System.out.print("ID: " + id);
-          System.out.print(", Age: " + age);
-          System.out.print(", First: " + first);
-          System.out.println(", Last: " + last);
-       }*/
-       //STEP 6: Clean-up environment
-       //rs.close();
-       //stmt.close();
-       //conn.close();
-    }catch(SQLException se){
-       //Handle errors for JDBC
-       se.printStackTrace();
-    }catch(Exception e){
-       //Handle errors for Class.forName
-       e.printStackTrace();
-    }finally{
-       //finally block used to close resources
-       try{
-          if(stmt!=null)
-             stmt.close();
-       }catch(SQLException se2){
-       }// nothing we can do
-       try{
-          if(conn!=null)
-             conn.close();
-       }catch(SQLException se){
-          se.printStackTrace();
-       }//end finally try
-    }//end try
-    System.out.println("Goodbye!");
+      topPanel.add(topLabel);
+      topPanel.add(file);
+      centerPanel.add(button);
+
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setSize(600, 200); 
+      frame.setTitle("MS3 Project");
+      frame.getContentPane().add(BorderLayout.NORTH, topPanel);
+      frame.getContentPane().add(BorderLayout.CENTER, centerPanel);
+      frame.setVisible(true);
+
+      button.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent action){
+            String newsql;
+            int received = 0;
+            Scanner scanner2 = null;
+
+            String fileName = file.getText();
+            String filelocation = new File(fileName).getAbsolutePath();
+            File toScanner = new File(filelocation);
+         //Reading in CSV file
+         try{
+            scanner2 = new Scanner(new File(toScanner, "UTF-8"));
+            scanner2.useDelimiter(","); //comma separated file
+            
+            received++;
+               
+            newsql = "INSERT INTO Columns" 
+               + "(A, B, C, D, E, F, G, H, I, J) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement insert = conn.prepareStatement(newsql);
+
+         
+         }
+         catch(FileNotFoundException e1){
+            e1.printStackTrace();
+         }
+         catch(SQLException e){
+            e.printStackTrace();
+         }
+         finally
+         {
+            scanner2.close();
+
+         }
+         
+         System.out.println("");
+         System.out.println(received);
+
+
+      }
+      });
+      
+     
+
+      
+      
  }//end main
  }//end FirstExample
