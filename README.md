@@ -1,5 +1,7 @@
 # Summary  
-  
+This repo contains all essential files in order to use the MS3Project app created. The app serves the purpose of taking in a .csv file and transmuting it to sqlite database  
+as well as verifying its contents meet certain criteria. If the entries fail these criteria, they are printed to a different .csv file. After completing this database shift, a log  
+is created to show the total entries received, entries that succefully passed and entries that didn't.
 # Running Application  
   
 # Approach/Assumptions  
