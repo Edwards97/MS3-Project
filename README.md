@@ -1,3 +1,10 @@
+# Summary  
+  
+# Running Application  
+  
+# Approach/Assumptions  
+
+
 # MS3-Project Timeline
 ### Day 1  
 Mostly worked on setting up SQLite environment (watching videos and downloading). Set up first stage of java file to accept .csv file and print contents.  
